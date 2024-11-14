@@ -2,6 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-input[type='password']:-ms-reveal {
+input[type='password']::-ms-reveal {
   display: none;
 }

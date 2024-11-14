@@ -13,6 +13,7 @@ export default function Input(props: InputType) {
     placeholder,
     disabled,
     value,
+    defaultValue,
   } = props;
 
   const [showPassword, setShowPassword] = useState(false);
@@ -31,6 +32,7 @@ export default function Input(props: InputType) {
         placeholder={placeholder}
         disabled={disabled}
         value={value}
+        defaultValue={defaultValue}
         id={type === 'password' ? 'hs-password-active' : name}
         className={`${className} w-full p-4 bg-white/5 backdrop-blur-md rounded-lg text-white focus:outline-none focus:bg-white/10`}
       />
