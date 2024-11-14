@@ -6,4 +6,5 @@ interface InputType {
   className?: string | boolean | undefined;
   placeholder?: string;
   disabled?: boolean;
+  value?: string | number | readonly string[] | undefined;
 }

@@ -1,14 +1,47 @@
 'use client';
 
-import { signin } from '@/app/actions/auth';
 import Button from '@/app/components/form/Button';
 import Input from '@/app/components/form/Input';
+import { usePost } from '@/app/hooks/usePost';
 import Link from 'next/link';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useState } from 'react';
 import { IoChevronBack } from 'react-icons/io5';
 
 export default function Page() {
-  const [state, action] = useFormState(signin, undefined);
+  const { postData, data, loading, error } = usePost('login');
+  const [formData, setFormData] = useState({
+    emailOrUsername: '',
+    password: '',
+  });
+
+  const [message, setMessage] = useState('');
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e?.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const isEmail = formData?.emailOrUsername.includes('@');
+    const payload = isEmail
+      ? {
+          email: formData.emailOrUsername,
+          username: formData.emailOrUsername,
+          password: formData.password,
+        }
+      : {
+          username: formData.emailOrUsername,
+          email: formData.emailOrUsername,
+          password: formData.password,
+        };
+
+    postData(payload);
+    setMessage(data?.message);
+  };
 
   return (
     <div className="flex justify-center items-center p-4 relative">
@@ -22,21 +55,37 @@ export default function Page() {
       </Link>
       <div className="pt-20 w-full">
         <h1 className="text-2xl font-bold ps-2 pb-6 text-white">Login</h1>
+        {message && (
+          <p
+            className={`${
+              error ||
+              message.includes('not found') ||
+              message.includes('wrong') ||
+              message.includes('password')
+                ? 'text-red-500'
+                : 'text-green-500'
+            }`}>
+            {message}
+          </p>
+        )}
         <form
-          action={action}
+          onSubmit={handleSubmit}
           className="flex flex-col gap-4 w-full justify-center items-center h-full">
-          <Input name="email" placeholder="Enter Username/Email" />
-          {state?.errors?.username ||
-            (state?.errors?.email && (
-              <p className="text-red-700">
-                {state?.errors?.username || state?.errors?.email}
-              </p>
-            ))}
-          <Input type="password" name="password" placeholder="Enter Password" />
-          {state?.errors?.password && (
-            <p className="text-red-700">{state?.errors?.password}</p>
-          )}
-          <SubmitButton />
+          <Input
+            onChange={handleChange}
+            name={'emailOrUsername'}
+            placeholder="Enter Username/Email"
+            value={formData.emailOrUsername}
+          />
+          <Input
+            onChange={handleChange}
+            type="password"
+            name="password"
+            placeholder="Enter Password"
+          />
+          <SubmitButton
+            onLoad={loading || !formData.emailOrUsername || !formData.password}
+          />
         </form>
         <p className="mt-8 text-white text-center font-light">
           No account ?{' '}
@@ -51,9 +100,7 @@ export default function Page() {
   );
 }
 
-function SubmitButton() {
-  const { onLoad }: any = useFormStatus();
-
+function SubmitButton({ onLoad }: { onLoad: boolean }) {
   return (
     <Button className="mt-4" disabled={onLoad} type="submit">
       Login

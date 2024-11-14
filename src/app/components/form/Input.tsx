@@ -4,8 +4,16 @@ import { useState } from 'react';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 
 export default function Input(props: InputType) {
-  const { name, type, onChange, required, className, placeholder, disabled } =
-    props;
+  const {
+    name,
+    type,
+    onChange,
+    required,
+    className,
+    placeholder,
+    disabled,
+    value,
+  } = props;
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -22,6 +30,7 @@ export default function Input(props: InputType) {
         required={required}
         placeholder={placeholder}
         disabled={disabled}
+        value={value}
         id={type === 'password' ? 'hs-password-active' : name}
         className={`${className} w-full p-4 bg-white/5 backdrop-blur-md rounded-lg text-white focus:outline-none focus:bg-white/10`}
       />
