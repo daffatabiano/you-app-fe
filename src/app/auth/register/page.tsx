@@ -28,7 +28,7 @@ export default function Page() {
     e.preventDefault();
     postData(formData);
     setMessage(data?.message);
-    if (message.includes('successfully')) {
+    if (data?.message?.includes('successfully')) {
       localStorage.setItem('user', JSON.stringify(formData));
       return router.push('/auth/login');
     }

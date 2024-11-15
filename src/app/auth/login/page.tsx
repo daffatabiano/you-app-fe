@@ -18,8 +18,6 @@ export default function Page() {
 
   const userDefaultRegister = JSON.parse(localStorage.getItem('user') || '{}');
 
-  console.log(userDefaultRegister);
-
   const [message, setMessage] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,13 +46,15 @@ export default function Page() {
     postData(payload);
     setMessage(data?.message);
     if (data?.message?.includes('successfully')) {
-      localStorage.removeItem('user');
+      if (userDefaultRegister) {
+        localStorage.removeItem('user');
+      }
       return router.push('/profile');
     }
   };
 
   return (
-    <div className="flex justify-center items-center p-4 relative md:w-1/4 md:min-h-[85vh] md:translate-y-10 md:m-auto md:shadow-lg md:rounded-lg md:bg-white/5 md:backdrop-blur w-full h-full">
+    <div className="flex justify-center items-center p-4 relative md:w-1/4 md:min-h-[85vh] md:translate-y-10 md:m-auto md:shadow-lg md:rounded-lg md:bg-white/5 md:backdrop-blur w-full h-screen">
       <Link
         href={'/'}
         className="flex items-center gap-1 absolute top-4 left-2 text-white">
@@ -63,7 +63,7 @@ export default function Page() {
         </i>
         Back
       </Link>
-      <div className="pt-20 w-full">
+      <div className="w-full">
         <h1 className="text-2xl font-bold ps-2 pb-6 text-white">Login</h1>
         {message && (
           <p
