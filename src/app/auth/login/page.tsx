@@ -44,6 +44,9 @@ export default function Page() {
         };
 
     postData(payload);
+    if (data) {
+      localStorage.setItem('token', data?.access_token);
+    }
     setMessage(data?.message);
     if (data?.message?.includes('successfully')) {
       if (userDefaultRegister) {
@@ -63,7 +66,7 @@ export default function Page() {
         </i>
         Back
       </Link>
-      <div className="w-full">
+      <div className="w-full -mt-44">
         <h1 className="text-2xl font-bold ps-2 pb-6 text-white">Login</h1>
         {message && (
           <p
