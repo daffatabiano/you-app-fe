@@ -4,6 +4,8 @@ export default function EditForm({
   horoscope,
   zodiac,
 }: any) {
+  const data = JSON.parse(localStorage.getItem('edit-profile'));
+
   return (
     <form
       onSubmit={handleCreateProfile}
@@ -30,6 +32,7 @@ export default function EditForm({
           <InputEdit
             placeholder="Enter Name"
             onChange={handleChange}
+            defaultValue={data?.displayName || ''}
             label="Display Name"
             name="displayName"
             type="text"
@@ -59,18 +62,20 @@ export default function EditForm({
             label="Birthday"
             name="birthday"
             type="date"
+            defaultValue={data?.birthday || ''}
           />
           <InputEdit
-            placeholder="--"
+            placeholder={data?.horoscope || '--'}
             label="Horoscope"
             name="horoscope"
             type="text"
             value={horoscope}
             className="text-white/30 capitalize"
+            defaultValue={data?.horoscope}
             disabled
           />
           <InputEdit
-            placeholder="--"
+            placeholder={data?.zodiac || '--'}
             label="Zodiac"
             name="zodiac"
             type="text"
@@ -83,6 +88,7 @@ export default function EditForm({
             label="Height"
             name="height"
             onChange={handleChange}
+            defaultValue={data?.height}
             type="number"
           />
           <InputEdit
@@ -90,6 +96,7 @@ export default function EditForm({
             label="Weight"
             name="weight"
             onChange={handleChange}
+            defaultValue={data?.weight}
             type="number"
           />
         </div>
@@ -108,6 +115,7 @@ function InputEdit(props: InputType) {
     onChange,
     value,
     className,
+    defaultValue,
   } = props;
   return (
     <div className="flex justify-between w-full items-center">
@@ -119,6 +127,7 @@ function InputEdit(props: InputType) {
         name={name}
         type={type}
         placeholder={placeholder}
+        defaultValue={defaultValue}
         value={value}
         disabled={disabled}
         className={`${className} text-end w-52 border border-white/20 p-2 placeholder:text-white/30 bg-white/5 backdrop-blur-md rounded-lg text-white focus:outline-none focus:bg-white/10`}
