@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { IoChevronBack } from 'react-icons/io5';
+import { usePut } from '../hooks/usePut';
 
 interface Profile {
   interests: string[];
@@ -12,8 +13,19 @@ interface Profile {
 export default function Page() {
   const router = useRouter();
   const token = localStorage.getItem('token');
+  const profile = JSON.parse(localStorage.getItem('edit-profile') || '{}')
+  const { putData } = usePut('updateProfile');
   if (!token) {
     router.push('/auth/login');
+  }
+  
+
+  const interestTag = () => {
+    const payload : Profile = {
+      ...profile,
+    }
+    putData(payload);
+    router.push('/profile');
   }
 
   return (
@@ -30,7 +42,7 @@ export default function Page() {
 
         <button
           type="button"
-          onClick={() => router.push('-1')}
+          onClick={interestTag}
           className="text-lg capitalize text-[#AADAFF] pe-2 bg-transparent">
           Save
         </button>

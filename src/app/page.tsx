@@ -7,9 +7,9 @@ export default function Home() {
   const text = 'YOU APP';
   return (
     <main className="flex md:w-1/3 md:m-auto min-h-screen flex-col items-center justify-center p-24">
-      <div>
+      <div className='w-full'>
         <p className="text-white/60">Welcome to,</p>
-        <h1 className="text-4xl font-extrabold tracking-wider text-white">
+        <h1 className="text-5xl w-full font-extrabold tracking-wider text-white">
           {text.split('').map((character, index) => (
             <span
               key={index}
