@@ -1,4 +1,5 @@
 'use client';
+
 import Button from '@/app/components/form/Button';
 import Input from '@/app/components/form/Input';
 import { usePost } from '@/app/hooks/usePost';
@@ -19,19 +20,34 @@ export default function Page() {
     confirmPassword: '',
   });
 
+  useEffect(() => {
+    if (formData.password !== formData.confirmPassword) {
+      setMessage('Passwords do not match');
+    } else {
+      setMessage('');
+    }
+  }, [formData.password, formData.confirmPassword]);
+
+  useEffect(() => {
+    if (data) {
+      setMessage(data.message);
+      if (data.message.includes('successfully')) {
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('user', JSON.stringify(formData));
+        }
+        return router.push('/auth/login');
+      }
+    }
+  }, [data, formData, router]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e?.target;
+    const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     postData(formData);
-    setMessage(data?.message);
-    if (data?.message?.includes('successfully')) {
-      localStorage.setItem('user', JSON.stringify(formData));
-      return router.push('/auth/login');
-    }
   };
 
   const disableButton =
@@ -41,17 +57,12 @@ export default function Page() {
     !formData.username ||
     !formData.confirmPassword;
 
-  useEffect(() => {
-    if (formData.password !== formData.confirmPassword) {
-      setMessage('passwords do not match');
-    } else setMessage('');
-  }, [formData.password, formData.confirmPassword]);
-
   return (
     <div className="flex justify-center items-center p-4 relative md:w-1/4 md:min-h-[85vh] md:translate-y-10 md:m-auto md:shadow-lg md:rounded-lg md:bg-white/5 md:backdrop-blur w-full h-full">
       <Link
-        href={'/'}
-        className="flex items-center gap-1 absolute top-4 left-2 text-white">
+        href="/"
+        className="flex items-center gap-1 absolute top-4 left-2 text-white"
+      >
         <i className="text-2xl">
           <IoChevronBack />
         </i>
@@ -68,23 +79,25 @@ export default function Page() {
               message.includes('password')
                 ? 'text-red-500'
                 : 'text-green-500'
-            }`}>
+            }`}
+          >
             {message}
           </p>
         )}
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col gap-4 w-full justify-center items-center h-full">
+          className="flex flex-col gap-4 w-full justify-center items-center h-full"
+        >
           <Input
             disabled={loading}
             onChange={handleChange}
-            name={'email'}
+            name="email"
             placeholder="Enter Email"
           />
           <Input
             disabled={loading}
             onChange={handleChange}
-            name={'username'}
+            name="username"
             placeholder="Create Username"
           />
           <Input
@@ -104,10 +117,11 @@ export default function Page() {
           <SubmitButton onLoad={disableButton} />
         </form>
         <p className="mt-8 text-white text-center font-light">
-          Have an account ?{' '}
+          Have an account?{' '}
           <Link
-            href={'/auth/login'}
-            className="underline underline-offset-4 text-[#efd5aa]">
+            href="/auth/login"
+            className="underline underline-offset-4 text-[#efd5aa]"
+          >
             Login Here
           </Link>
         </p>

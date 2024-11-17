@@ -64,7 +64,7 @@ const TagInput = () => {
   const [tags, setTags] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
-  const storedProfile = localStorage.getItem('edit-profile');
+  const [storedProfile, setStoredProfile] = useState<any>(null)
   const parsedProfile = storedProfile ? JSON.parse(storedProfile) : {};
   const [profile, setProfile] = useState<Profile>(() => {
     if (!parsedProfile.interests) {
@@ -73,6 +73,12 @@ const TagInput = () => {
       return parsedProfile;
     }
   });
+
+  useEffect(() => {
+    if(typeof window !== 'undefined'){
+      setStoredProfile(localStorage.getItem('edit-profile'));
+    }
+  },[])
 
   useEffect(() => {
     setTags(profile.interests);

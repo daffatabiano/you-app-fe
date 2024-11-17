@@ -80,7 +80,7 @@ export function AboutCard({ data }: { data: any }) {
       zodiac,
       gender: target?.gender.value,
     };
-    if (payload) {
+    if (payload && typeof window !== 'undefined') {
       localStorage.setItem('edit-profile', JSON.stringify(payload));
       const existingProfile = JSON.parse(
         localStorage.getItem('edit-profile') || '{}'
@@ -177,11 +177,13 @@ export function AboutCard({ data }: { data: any }) {
 export function InterestCard() {
   const [interests, setInterests] = useState<string[]>([]);
   useEffect(() => {
-    const storedProfile = localStorage.getItem('edit-profile');
-    if (storedProfile) {
-      const profile = JSON.parse(storedProfile);
-      if (profile.interests) {
-        setInterests(profile.interests);
+    if (typeof window !== 'undefined') {
+      const storedProfile = localStorage.getItem('edit-profile');
+      if (storedProfile) {
+        const profile = JSON.parse(storedProfile);
+        if (profile.interests) {
+          setInterests(profile.interests);
+        }
       }
     }
   }, []);
@@ -220,7 +222,12 @@ export function InterestCard() {
 }
 
 export function ImageCard() {
-  const storedProfile = localStorage.getItem('edit-profile');
+  const [storedProfile,setStoredProfile] = useState<any>(null);
+  useEffect(() => {
+    if(typeof window !== 'undefined'){
+      setStoredProfile(localStorage.getItem('edit-profile'))
+    }
+  },[])
   const parsedProfile = storedProfile ? JSON.parse(storedProfile) : {};
   const [profile, setProfile] = useState(() => {
     return parsedProfile;
@@ -267,12 +274,12 @@ export function ImageCard() {
           <p className="text-white capitalize">{profile.gender}</p>
           <div className="flex gap-2">
             <p className="p-2 px-4 rounded-full flex items-center gap-2 text-white bg-[#0e191f] ">
-              <span className="text-2xl">{zodiacIcons[profile.horoscope]}</span>
-              {profile.horoscope}
+              <span className="text-2xl">{zodiacIcons[data?.data?.horoscope]}</span>
+              {data?.data?.horoscope}
             </p>
             <p className="p-2 px-4 rounded-full flex items-center gap-2 text-white bg-[#0e191f] ">
-              <span className="text-2xl">{chineseZodiac[profile.zodiac]}</span>
-              {profile.zodiac}
+              <span className="text-2xl">{chineseZodiac[data?.data?.zodiac]}</span>
+              {data?.data?.zodiac}
             </p>
           </div>
         </div>

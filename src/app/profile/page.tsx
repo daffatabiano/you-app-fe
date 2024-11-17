@@ -5,14 +5,19 @@ import { AboutCard, ImageCard, InterestCard } from '../components/Card';
 import { IoChevronBack } from 'react-icons/io5';
 import { useRouter } from 'next/navigation';
 import { useGet } from '../hooks/useGet';
+import { useEffect } from 'react';
 
 export default function Page() {
   const { data } = useGet('getProfile');
-  const token = localStorage.getItem('token');
   const router = useRouter();
+  useEffect(() => {
+if(typeof window !== 'undefined'){
+  const token = localStorage.getItem('token');
   if (!token) {
     router.push('/auth/login');
   }
+}
+  },[])
 
   return (
     <section className="p-2 md:w-1/3 md:m-auto flex flex-col gap-4 relative">

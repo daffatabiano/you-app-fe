@@ -5,7 +5,7 @@ import Input from '@/app/components/form/Input';
 import { usePost } from '@/app/hooks/usePost';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { IoChevronBack } from 'react-icons/io5';
 
 export default function Page() {
@@ -16,9 +16,15 @@ export default function Page() {
     password: '',
   });
 
-  const userDefaultRegister = JSON.parse(localStorage.getItem('user') || '{}');
-
+  const [userDefaultRegister, setUserDefaultRegister] = useState<any>({});
   const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
+      setUserDefaultRegister(storedUser);
+    }
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e?.target;
@@ -57,7 +63,7 @@ export default function Page() {
   };
 
   return (
-    <div className="flex justify-center items-center p-4 relative md:w-1/4 md:h-[600px] md:translate-y-10 md:m-auto md:shadow-lg md:rounded-lg md:bg-white/5 md:backdrop-blur w-full h-screen">
+    <div className="flex justify-center items-center p-4 relative md:w-1/3 xl:w-1/4 md:h-[600px] md:translate-y-10 md:m-auto md:shadow-lg md:rounded-lg md:bg-white/5 md:backdrop-blur w-full h-screen">
       <Link
         href={'/'}
         className="flex items-center gap-1 absolute top-4 left-2 text-white">
@@ -66,7 +72,7 @@ export default function Page() {
         </i>
         Back
       </Link>
-      <div className="w-full -mt-4">
+      <div className="w-full md:-mt-4 ">
         <h1 className="text-2xl font-bold ps-2 pb-6 text-white">Login</h1>
         {message && (
           <p
