@@ -12,12 +12,11 @@ interface Profile {
 
 export default function Page() {
   const router = useRouter();
-  const token = localStorage.getItem('token');
-  const profile = JSON.parse(localStorage.getItem('edit-profile') || '{}')
+  const [profile, setProfile] =useState<any>(null)
+
   const { putData } = usePut('updateProfile');
-  if (!token) {
-    router.push('/auth/login');
-  }
+
+
 
   const interestTag = () => {
     const payload : Profile = {
@@ -26,6 +25,17 @@ export default function Page() {
     putData(payload);
     router.push('/profile');
   }
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedProfile = JSON.parse(localStorage.getItem('edit-profile') || '{}');
+      setProfile(storedProfile);
+      const token = localStorage.getItem('token');
+      if (!token) {
+        router.push('/auth/login');
+      }
+    }
+  },[])
 
   return (
     <section className="p-2 md:w-1/3 md:m-auto flex flex-col relative">
