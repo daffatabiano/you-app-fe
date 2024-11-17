@@ -18,7 +18,6 @@ export default function Page() {
   if (!token) {
     router.push('/auth/login');
   }
-  
 
   const interestTag = () => {
     const payload : Profile = {

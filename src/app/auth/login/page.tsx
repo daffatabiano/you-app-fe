@@ -66,7 +66,7 @@ export default function Page() {
         </i>
         Back
       </Link>
-      <div className="w-full -mt-44">
+      <div className="w-full -mt-4">
         <h1 className="text-2xl font-bold ps-2 pb-6 text-white">Login</h1>
         {message && (
           <p
