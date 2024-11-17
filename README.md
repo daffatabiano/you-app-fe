@@ -40,6 +40,8 @@ yarn dev
 Open http://localhost:3000 with your browser to see the result.
 
 # Technologies 
+<p align="left">
+    
  <img src="https://cdn.worldvectorlogo.com/logos/next-js.svg" alt="next" width="40" height="40"/>
 
  <img src="https://www.svgrepo.com/show/374118/tailwind.svg" alt="tailwind" width="40" height="40"/>
@@ -47,6 +49,7 @@ Open http://localhost:3000 with your browser to see the result.
  <img src="https://cdn.freebiesupply.com/logos/thumbs/2x/nodejs-1-logo.png" alt="nodejs" width="40" height="40"/>
 
  <img src="https://www.svgrepo.com/show/88703/api.svg" alt="Rest API" width="40" height="40"/>
+</p>
 
 # 🌲 Project Structure 
 The project follows a modular and scalable folder structure:
