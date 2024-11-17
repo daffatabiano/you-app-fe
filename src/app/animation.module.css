@@ -1,0 +1,22 @@
+.animatedText {
+  animation: fall 2s linear infinite;
+  animation-delay: calc(var(--i) * 200ms);
+  transform: translateY(-100%);
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  50%,
+  80% {
+    color: hsl(calc(var(--i) * 25), 100%, 50%);
+    transform: translateY(0);
+    opacity: 1;
+  }
+  95%,
+  100% {
+    opacity: 0;
+  }
+}
