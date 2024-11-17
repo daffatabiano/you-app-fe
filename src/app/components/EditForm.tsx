@@ -1,10 +1,12 @@
+import { useGet } from '../hooks/useGet';
+
 export default function EditForm({
   handleCreateProfile,
   handleChange,
   horoscope,
   zodiac,
 }: any) {
-  const data = JSON.parse(localStorage.getItem('edit-profile'));
+  const { data } = useGet('getProfile');
 
   return (
     <form
@@ -22,7 +24,17 @@ export default function EditForm({
       <div className="gap-4 flex flex-col">
         <div className="w-full flex gap-4 items-center">
           <div className="relative rounded-3xl w-16 h-16 bg-white/10 flex justify-center items-center">
-            <p className="text-2xl text-extralight  text-[#efd5aa]">+</p>
+            {data?.profileImage ? (
+              <Image
+                src={data?.profileImage}
+                alt="profile"
+                width={100}
+                height={100}
+                className="rounded-3xl"
+              />
+            ) : (
+              <p className="text-2xl text-extralight  text-[#efd5aa]">+</p>
+            )}
             <input type="file" className="absolute w-full h-full opacity-0" />
           </div>
           <p className="text-extralight">add image</p>
@@ -32,7 +44,7 @@ export default function EditForm({
           <InputEdit
             placeholder="Enter Name"
             onChange={handleChange}
-            defaultValue={data?.displayName || ''}
+            defaultValue={data?.data?.name || ''}
             label="Display Name"
             name="displayName"
             type="text"
@@ -46,13 +58,22 @@ export default function EditForm({
               name="gender"
               id="gender"
               className=" text-end w-52 border border-white/20 p-2 placeholder:text-white/30 bg-white/5 backdrop-blur-md rounded-lg text-white focus:outline-none focus:bg-white/10">
-              <option value="default" defaultChecked className="text-gray-800">
+              <option
+                value="default"
+                defaultChecked={!data?.data?.gender}
+                className="text-gray-800">
                 Select Gender
               </option>
-              <option value="male" className="text-gray-800">
+              <option
+                value="male"
+                defaultChecked={data?.data?.gender === 'male'}
+                className="text-gray-800">
                 Male
               </option>
-              <option value="female" className="text-gray-800">
+              <option
+                value="female"
+                defaultChecked={data?.data?.gender === 'female'}
+                className="text-gray-800">
                 Female
               </option>
             </select>
@@ -62,24 +83,23 @@ export default function EditForm({
             label="Birthday"
             name="birthday"
             type="date"
-            defaultValue={data?.birthday || ''}
+            defaultValue={data?.data?.birthday || ''}
           />
           <InputEdit
-            placeholder={data?.horoscope || '--'}
+            placeholder={data?.data?.horoscope || '--'}
             label="Horoscope"
             name="horoscope"
             type="text"
-            value={horoscope}
+            value={horoscope ? horoscope : data?.data?.horoscope}
             className="text-white/30 capitalize"
-            defaultValue={data?.horoscope}
             disabled
           />
           <InputEdit
-            placeholder={data?.zodiac || '--'}
+            placeholder={data?.data?.zodiac || '--'}
             label="Zodiac"
             name="zodiac"
             type="text"
-            value={zodiac}
+            value={zodiac ? zodiac : data?.data?.zodiac}
             className="text-white/30 capitalize"
             disabled
           />
@@ -88,7 +108,7 @@ export default function EditForm({
             label="Height"
             name="height"
             onChange={handleChange}
-            defaultValue={data?.height}
+            defaultValue={data?.data?.height}
             type="number"
           />
           <InputEdit
@@ -96,7 +116,7 @@ export default function EditForm({
             label="Weight"
             name="weight"
             onChange={handleChange}
-            defaultValue={data?.weight}
+            defaultValue={data?.data?.weight}
             type="number"
           />
         </div>

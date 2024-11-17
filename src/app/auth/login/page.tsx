@@ -57,7 +57,7 @@ export default function Page() {
   };
 
   return (
-    <div className="flex justify-center items-center p-4 relative md:w-1/4 md:min-h-[85vh] md:translate-y-10 md:m-auto md:shadow-lg md:rounded-lg md:bg-white/5 md:backdrop-blur w-full h-screen">
+    <div className="flex justify-center items-center p-4 relative md:w-1/4 md:h-[600px] md:translate-y-10 md:m-auto md:shadow-lg md:rounded-lg md:bg-white/5 md:backdrop-blur w-full h-screen">
       <Link
         href={'/'}
         className="flex items-center gap-1 absolute top-4 left-2 text-white">

@@ -11,12 +11,16 @@ interface Profile {
 
 export default function Page() {
   const router = useRouter();
+  const token = localStorage.getItem('token');
+  if (!token) {
+    router.push('/auth/login');
+  }
 
   return (
     <section className="p-2 md:w-1/3 md:m-auto flex flex-col relative">
       <div className="flex items-center justify-between ">
         <Link
-          href={'/'}
+          href={'/profile'}
           className="flex items-center gap-2 top-4 left-2 text-white">
           <i className="text-2xl">
             <IoChevronBack />
@@ -49,14 +53,16 @@ const TagInput = () => {
   const [tags, setTags] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
+  const storedProfile = localStorage.getItem('edit-profile');
+  const parsedProfile = storedProfile ? JSON.parse(storedProfile) : {};
   const [profile, setProfile] = useState<Profile>(() => {
-    const storedProfile = JSON.parse(localStorage.getItem('edit-profile'));
-    if (!storedProfile.interests) {
-      return { ...storedProfile, interests: [] };
+    if (!parsedProfile.interests) {
+      return { ...parsedProfile, interests: [] };
     } else {
-      return storedProfile;
+      return parsedProfile;
     }
   });
+
   useEffect(() => {
     setTags(profile.interests);
   }, [profile.interests]);

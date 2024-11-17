@@ -35,6 +35,9 @@ import {
 } from 'react-icons/gi';
 import { FaFirefox } from 'react-icons/fa';
 import { SiDungeonsanddragons } from 'react-icons/si';
+import { usePost } from '../hooks/usePost';
+import { usePut } from '../hooks/usePut';
+import { useGet } from '../hooks/useGet';
 
 export default function Card({
   children,
@@ -57,6 +60,8 @@ export function AboutCard({ data }: { data: any }) {
   const [zodiac, setZodiac] = useState('');
   const [formData, setFormData] = useState<any>({});
   const [error, setError] = useState('');
+  const { data: response, loading, postData } = usePost('createProfile');
+  const { putData } = usePut('updateProfile');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e?.target;
@@ -75,16 +80,34 @@ export function AboutCard({ data }: { data: any }) {
       zodiac,
       gender: target?.gender.value,
     };
-    if (!payload?.displayName || !payload?.birthday || !payload?.gender) {
-      setError('All fields are required');
-      setTimeout(() => setError(''), 3000);
-    } else if (payload) {
+    if (payload) {
       localStorage.setItem('edit-profile', JSON.stringify(payload));
       const existingProfile = JSON.parse(
         localStorage.getItem('edit-profile') || '{}'
       );
+      if(payload?.gender === 'default') {
+        setError('Please select your gender');
+      }
+      if(!existingProfile){
+        postData({
+          ...payload,
+          name: payload?.displayName,
+          birthday: payload?.birthday,
+          height: Number(payload?.height),
+          weight: Number(payload?.weight),
+          interest: payload?.interest,
+        });
+      }
       const updateProfile = { ...existingProfile, ...payload };
       if (existingProfile) {
+        putData({
+          ...updateProfile,
+          name: updateProfile?.displayName,
+          birthday: updateProfile?.birthday,
+          height: Number(updateProfile?.height),
+          weight: Number(updateProfile?.weight),
+          interest: updateProfile?.interest,
+        });
         localStorage.setItem('edit-profile', JSON.stringify(updateProfile));
       }
       return setOpenForm(false);
@@ -125,18 +148,20 @@ export function AboutCard({ data }: { data: any }) {
             horoscope={horoscope}
             zodiac={zodiac}
           />
-        ) : data?.displayName ? (
+        ) : data?.data?.name ? (
           <div className="flex flex-col gap-2 pb-4">
-            {Object?.keys(data).map((key) => {
+            {Object?.keys(data?.data).map((key) => {
+              const value = data?.data[key];
               if (
-                key === 'displayName' ||
+                key === 'username' ||
                 key === 'gender' ||
-                key === 'interests'
+                key === 'interests' ||
+                key === 'email'
               ) {
                 return null;
               }
 
-              return <ProfileData key={key} label={key} value={data[key]} />;
+              return <ProfileData key={key} label={key} value={value} />;
             })}
           </div>
         ) : (
@@ -195,12 +220,14 @@ export function InterestCard() {
 }
 
 export function ImageCard() {
+  const storedProfile = localStorage.getItem('edit-profile');
+  const parsedProfile = storedProfile ? JSON.parse(storedProfile) : {};
   const [profile, setProfile] = useState(() => {
-    const storedProfile = JSON.parse(localStorage.getItem('edit-profile'));
-    return storedProfile || {};
+    return parsedProfile;
   });
+  const {data} = useGet('getProfile')
 
-  const zodiacIcons = {
+  const zodiacIcons: { [key: string]: React.ReactNode } = {
     Aries: <TbZodiacAries />,
     Taurus: <TbZodiacTaurus />,
     Gemini: <TbZodiacGemini />,
@@ -215,7 +242,7 @@ export function ImageCard() {
     Pisces: <TbZodiacPisces />,
   };
 
-  const chineseZodiac = {
+  const chineseZodiac: { [key: string]: React.ReactNode } = {
     Rat: <GiSeatedMouse />,
     Ox: <FaFirefox />,
     Tiger: <GiTigerHead />,
@@ -235,15 +262,15 @@ export function ImageCard() {
       <div className="h-full flex rounded-lg overflow-hidden relative shadow-[inset_0px_-50px_40px_-2px_rgba(0,_0,_0,_0.7)]">
         <div className="absolute bottom-4 left-4 flex flex-col gap-2">
           <h1 className="text-white font-bold text-2xl capitalize ">
-            {profile.displayName}
+            {data?.data?.name}
           </h1>
           <p className="text-white capitalize">{profile.gender}</p>
           <div className="flex gap-2">
-            <p className="p-2 rounded-full flex items-center gap-2 text-white bg-[#0e191f] ">
+            <p className="p-2 px-4 rounded-full flex items-center gap-2 text-white bg-[#0e191f] ">
               <span className="text-2xl">{zodiacIcons[profile.horoscope]}</span>
               {profile.horoscope}
             </p>
-            <p className="p-2 rounded-full flex items-center gap-2 text-white bg-[#0e191f] ">
+            <p className="p-2 px-4 rounded-full flex items-center gap-2 text-white bg-[#0e191f] ">
               <span className="text-2xl">{chineseZodiac[profile.zodiac]}</span>
               {profile.zodiac}
             </p>
