@@ -25,12 +25,10 @@ export default function EditForm({
         <div className="w-full flex gap-4 items-center">
           <div className="relative rounded-3xl w-16 h-16 bg-white/10 flex justify-center items-center">
             {data?.profileImage ? (
-              <Image
+              <img
                 src={data?.profileImage}
                 alt="profile"
-                width={100}
-                height={100}
-                className="rounded-3xl"
+                className="rounded-3xl w-16 h-16"
               />
             ) : (
               <p className="text-2xl text-extralight  text-[#efd5aa]">+</p>
