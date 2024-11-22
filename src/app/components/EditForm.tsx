@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useGet } from '../hooks/useGet';
 
 export default function EditForm({
@@ -7,6 +8,14 @@ export default function EditForm({
   zodiac,
 }: any) {
   const { data } = useGet('getProfile');
+  const [gender, setGender] = useState('default');
+
+  useEffect(() => {
+    if(typeof window !== 'undefined'){
+      const gender = JSON.parse(localStorage.getItem('edit-profile') || '{}').gender
+      setGender(gender)
+    }
+  },[])
 
   return (
     <form
@@ -58,19 +67,19 @@ export default function EditForm({
               className=" text-end w-52 border border-white/20 p-2 placeholder:text-white/30 bg-white/5 backdrop-blur-md rounded-lg text-white focus:outline-none focus:bg-white/10">
               <option
                 value="default"
-                defaultChecked={!data?.data?.gender}
+                defaultChecked={!gender}
                 className="text-gray-800">
                 Select Gender
               </option>
               <option
                 value="male"
-                defaultChecked={data?.data?.gender === 'male'}
+                defaultChecked={gender === 'male'}
                 className="text-gray-800">
                 Male
               </option>
               <option
                 value="female"
-                defaultChecked={data?.data?.gender === 'female'}
+                defaultChecked={gender === 'female'}
                 className="text-gray-800">
                 Female
               </option>

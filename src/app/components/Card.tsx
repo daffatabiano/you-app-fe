@@ -229,9 +229,7 @@ export function ImageCard() {
     }
   },[])
   const parsedProfile = storedProfile ? JSON.parse(storedProfile) : {};
-  const [profile, setProfile] = useState(() => {
-    return parsedProfile;
-  });
+  const profile = parsedProfile || {};
   const {data} = useGet('getProfile')
 
   const zodiacIcons: { [key: string]: React.ReactNode } = {
