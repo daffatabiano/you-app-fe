@@ -13,8 +13,8 @@ export default function Page() {
   const router = useRouter();
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('token');
-      if (!token) {
+      const hasLogin = localStorage.getItem('token');
+      if (!hasLogin) {
         router.push('/auth/login');
       }
     }
